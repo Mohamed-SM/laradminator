@@ -1,14 +1,14 @@
 <?php
 
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 /*
 |------------------------------------------------------------------------------------
 | Admin
 |------------------------------------------------------------------------------------
 */
-Route::group(['prefix' => ADMIN, 'as' => ADMIN . '.', 'middleware'=>['auth', 'Role:10']], function () {
+Route::group(['prefix' => ADMIN, 'as' => ADMIN . '.', 'middleware' => ['verified', 'auth', 'Role:10']], function () {
     Route::get('/', 'DashboardController@index')->name('dash');
     Route::resource('users', 'UserController');
 });
@@ -16,3 +16,5 @@ Route::group(['prefix' => ADMIN, 'as' => ADMIN . '.', 'middleware'=>['auth', 'Ro
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Route::get('/send/email', 'HomeController@mail');

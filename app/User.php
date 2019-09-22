@@ -38,7 +38,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereVerified($value)
  * @mixin \Eloquent
  */
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
 
@@ -102,13 +102,13 @@ class User extends Authenticatable
     {
         $this->attributes['password'] = bcrypt($value);
     }
-    
+
     public function getAvatarAttribute($value)
     {
         if (!$value) {
             return 'http://placehold.it/160x160';
         }
-    
+
         return config('variables.avatar.public').$value;
     }
     public function setAvatarAttribute($photo)
@@ -126,7 +126,7 @@ class User extends Authenticatable
         parent::boot();
         static::updating(function ($user) {
             $original = $user->getOriginal();
-            
+
             if (\Hash::check('', $user->password)) {
                 $user->attributes['password'] = $original['password'];
             }

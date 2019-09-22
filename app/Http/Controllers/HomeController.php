@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use App\Mail\SendMailable;
+use Mail;
 
 class HomeController extends Controller
 {
@@ -19,10 +22,18 @@ class HomeController extends Controller
     /**
      * Show the application dashboard.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
         return view('home');
+    }
+
+    public function mail(Request $request)
+    {
+        $name = 'Mohamed';
+        Mail::to('smuniv.sba@gmail.com')->send(new SendMailable($name));
+
+        return 'Email was sent';
     }
 }
